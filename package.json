@@ -1,37 +1,22 @@
 {
-  "name": "hello-reason",
+  "name": "re-mongo",
   "version": "0.1.0",
-  "description": "Reason workflow with Esy",
   "license": "MIT",
   "esy": {
-    "build": "refmterr dune build -p #{self.name}",
-    "NOTE": "Optional release Section. Customizes result of `esy release`",
-    "release": {
-      "releasedBinaries": [
-        "Hello.exe"
-      ],
-      "deleteFromBinaryRelease": [
-        "*esy_ocaml_*",
-        "*refmterr-*",
-        "ocaml-*"
-      ]
-    }
+    "build": "refmterr dune build -p #{self.name}"
   },
   "dependencies": {
     "@opam/dune": "*",
-    "@opam/lambda-term": "*",
     "@opam/lwt": "*",
     "@esy-ocaml/reason": "*",
     "refmterr": "*",
-    "ocaml": "~4.6.0"
+    "ocaml": "4.7.1"
   },
   "resolutions": {
-    "@esy-ocaml/esy-installer": "0.0.1",
-    "@opam/menhir": "20171013",
-    "@opam/re": "1.8.0"
+    "@esy-ocaml/reason": "anmonteiro/reason#anmonteiro/dune-1.4"
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*",
-    "ocaml": "~4.6.0"
+    "ocaml": "4.7.1"
   }
 }
