@@ -6,11 +6,12 @@
     "build": "refmterr dune build -p #{self.name}"
   },
   "dependencies": {
+    "ocaml": "4.7.1",
+    "refmterr": "*",
+    "@esy-ocaml/reason": "*",
     "@opam/dune": "*",
     "@opam/lwt": "*",
-    "@esy-ocaml/reason": "*",
-    "refmterr": "*",
-    "ocaml": "4.7.1"
+    "@opam/lwt_ppx": "*"
   },
   "resolutions": {
     "@esy-ocaml/reason": "anmonteiro/reason#anmonteiro/dune-1.4"

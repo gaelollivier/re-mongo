@@ -1,4 +1,6 @@
 (executable
   (name Demo)
   (public_name Demo)
-  (libraries re-mongo))
+  (preprocess
+    (pps lwt_ppx))
+  (libraries re-mongo lwt_ppx))

@@ -1,5 +1,5 @@
 {
-  "hash": "7c8689e9ab6aeeb609fe64a9ad4afd89",
+  "hash": "b8a2e9a44e4665310ab61f6e91d8b57b",
   "root": "root@path:./package.json",
   "node": {
     "root@path:./package.json": {
@@ -13,8 +13,8 @@
       "dependencies": [
         "@esy-ocaml/merlin@3.0.5005",
         "@esy-ocaml/reason@github:anmonteiro/reason#anmonteiro/dune-1.4",
-        "@opam/dune@opam:1.4.0", "@opam/lwt@opam:4.1.0", "ocaml@4.7.1",
-        "refmterr@3.1.7"
+        "@opam/dune@opam:1.4.0", "@opam/lwt@opam:4.1.0",
+        "@opam/lwt_ppx@opam:1.2.1", "ocaml@4.7.1", "refmterr@3.1.7"
       ]
     },
     "refmterr@3.1.7": {
@@ -228,6 +228,26 @@
         "@opam/seq@opam:base", "ocaml@4.7.1"
       ]
     },
+    "@opam/ppx_tools_versioned@opam:5.2.1": {
+      "record": {
+        "name": "@opam/ppx_tools_versioned",
+        "version": "opam:5.2.1",
+        "source":
+          "archive:https://github.com/ocaml-ppx/ppx_tools_versioned/archive/5.2.1.tar.gz#md5:1ae6ae43ec161fbbf12c2b4d3a7e26f5",
+        "files": [],
+        "opam": {
+          "name": "ppx_tools_versioned",
+          "version": "5.2.1",
+          "opam":
+            "opam-version: \"2.0\"\nname: \"ppx_tools_versioned\"\nversion: \"5.2.1\"\nsynopsis: \"A variant of ppx_tools based on ocaml-migrate-parsetree\"\nmaintainer: \"frederic.bour@lakaban.net\"\nauthors: [\n  \"Frédéric Bour <frederic.bour@lakaban.net>\"\n  \"Alain Frisch <alain.frisch@lexifi.com>\"\n]\nlicense: \"MIT\"\ntags: \"syntax\"\nhomepage: \"https://github.com/let-def/ppx_tools_versioned\"\nbug-reports: \"https://github.com/let-def/ppx_tools_versioned/issues\"\ndepends: [\n  \"ocaml\" {>= \"4.02.0\"}\n  \"jbuilder\" {build & >= \"1.0+beta17\"}\n  \"ocaml-migrate-parsetree\" {>= \"1.0.10\"}\n]\nbuild: [\n  [\"jbuilder\" \"subst\" \"-p\" name] {pinned}\n  [\"jbuilder\" \"build\" \"-p\" name \"-j\" jobs]\n  [\"jbuilder\" \"runtest\" \"-p\" name \"-j\" jobs] {with-test}\n]\ndev-repo: \"git://github.com/let-def/ppx_tools_versioned.git\"\nurl {\n  src:\n    \"https://github.com/ocaml-ppx/ppx_tools_versioned/archive/5.2.1.tar.gz\"\n  checksum: \"md5=1ae6ae43ec161fbbf12c2b4d3a7e26f5\"\n}",
+          "override": null
+        }
+      },
+      "dependencies": [
+        "@esy-ocaml/substs@0.0.1", "@opam/jbuilder@opam:transition",
+        "@opam/ocaml-migrate-parsetree@opam:1.1.0", "ocaml@4.7.1"
+      ]
+    },
     "@opam/ocamlfind@opam:1.8.0": {
       "record": {
         "name": "@opam/ocamlfind",
@@ -429,6 +449,27 @@
       "dependencies": [
         "@esy-ocaml/substs@0.0.1", "@opam/jbuilder@opam:transition",
         "@opam/lwt@opam:4.1.0", "@opam/react@opam:1.2.1", "ocaml@4.7.1"
+      ]
+    },
+    "@opam/lwt_ppx@opam:1.2.1": {
+      "record": {
+        "name": "@opam/lwt_ppx",
+        "version": "opam:1.2.1",
+        "source":
+          "archive:https://github.com/ocsigen/lwt/archive/4.1.0.tar.gz#md5:e919bee206f18b3d49250ecf9584fde7",
+        "files": [],
+        "opam": {
+          "name": "lwt_ppx",
+          "version": "1.2.1",
+          "opam":
+            "opam-version: \"2.0\"\nname: \"lwt_ppx\"\nversion: \"1.2.1\"\nsynopsis:\n  \"PPX syntax for Lwt, providing something similar to async/await from JavaScript\"\nmaintainer: \"Anton Bachin <antonbachin@yahoo.com>\"\nauthors: \"Gabriel Radanne\"\nlicense: \"LGPL with OpenSSL linking exception\"\nhomepage: \"https://github.com/ocsigen/lwt\"\ndoc: \"https://ocsigen.org/lwt/api/Ppx_lwt\"\nbug-reports: \"https://github.com/ocsigen/lwt/issues\"\ndepends: [\n  \"ocaml\" {>= \"4.02.0\"}\n  \"jbuilder\" {build & >= \"1.0+beta14\"}\n  \"lwt\"\n  \"ocaml-migrate-parsetree\"\n  \"ppx_tools_versioned\" {>= \"5.0.1\"}\n]\nbuild: [\"jbuilder\" \"build\" \"-p\" name \"-j\" jobs]\ndev-repo: \"git+https://github.com/ocsigen/lwt.git\"\nurl {\n  src: \"https://github.com/ocsigen/lwt/archive/4.1.0.tar.gz\"\n  checksum: \"md5=e919bee206f18b3d49250ecf9584fde7\"\n}",
+          "override": null
+        }
+      },
+      "dependencies": [
+        "@esy-ocaml/substs@0.0.1", "@opam/jbuilder@opam:transition",
+        "@opam/lwt@opam:4.1.0", "@opam/ocaml-migrate-parsetree@opam:1.1.0",
+        "@opam/ppx_tools_versioned@opam:5.2.1", "ocaml@4.7.1"
       ]
     },
     "@opam/lwt_log@opam:1.1.0": {

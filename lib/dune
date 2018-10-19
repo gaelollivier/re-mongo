@@ -1,4 +1,7 @@
 (library
  (name ReMongo)
  (public_name re-mongo)
- (flags (:standard -w -52)))
+ (flags (:standard -w -52))
+ (preprocess
+    (pps lwt_ppx))
+ (libraries unix lwt lwt.unix lwt_ppx))
