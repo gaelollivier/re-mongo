@@ -1,5 +1,3 @@
-/* Converted from Ocaml: https://github.com/MassD/bson/blob/master/src/bson.ml */
-
 exception Invalid_objectId;
 exception Wrong_bson_type;
 exception Wrong_string;
