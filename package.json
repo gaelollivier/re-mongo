@@ -11,7 +11,8 @@
     "@esy-ocaml/reason": "*",
     "@opam/dune": "*",
     "@opam/lwt": "*",
-    "@opam/lwt_ppx": "*"
+    "@opam/lwt_ppx": "*",
+    "@opam/hex": "*"
   },
   "resolutions": {
     "@esy-ocaml/reason": "anmonteiro/reason#anmonteiro/dune-1.4"

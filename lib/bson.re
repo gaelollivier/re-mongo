@@ -1,4 +1,3 @@
-exception Invalid_objectId;
 exception Wrong_bson_type;
 exception Wrong_string;
 exception Malformed_bson;
@@ -15,7 +14,7 @@ and element =
   | Document(document)
   | Array(list(element))
   | Binary(binary)
-  | ObjectId(string) /* only 12 bytes */
+  | ObjectId(ObjectId.t) /* only 12 bytes */
   | Boolean(bool)
   | UTC(int64)
   | Null(special)
@@ -101,16 +100,9 @@ let hex_to_string = s => {
 
   convert(0);
 };
-let create_objectId = v =>
-  if (String.length(v) == 12) {
-    ObjectId(v);
-  } else if (String.length(v) == 24) {
-    try (ObjectId(hex_to_string(v))) {
-    | Failure("int_of_string") => raise(Invalid_objectId)
-    };
-  } else {
-    raise(Invalid_objectId);
-  };
+
+let create_objectId = v => ObjectId(v);
+
 let create_boolean = v => Boolean(v);
 let create_utc = v => UTC(v);
 let create_null = () => Null(NULL);
@@ -253,12 +245,7 @@ let encode_string = (buf, s) => {
   };
 };
 
-let encode_objectId = (buf, s) =>
-  if (String.length(s) != 12) {
-    raise(Invalid_objectId);
-  } else {
-    Buffer.add_string(buf, s);
-  };
+let encode_objectId = (buf, s) => Buffer.add_string(buf, s);
 
 let encode_binary = (buf, c, b) => {
   encode_int32(buf, Int32.of_int(String.length(b)));
@@ -309,7 +296,7 @@ let encode = doc => {
       };
     | ObjectId(v) =>
       encode_ename(buf, '\007', ename);
-      encode_objectId(buf, v);
+      encode_objectId(buf, ObjectId.toBinaryString(v));
     | Boolean(v) =>
       encode_ename(buf, '\b', ename);
       Buffer.add_char(buf, if (v) {'\001'} else {'\000'});
@@ -456,7 +443,7 @@ let decode_binary = (str, cur) => {
 };
 
 let decode_objectId = (str, cur) => (
-  ObjectId(String.sub(str, cur, 12)),
+  ObjectId(String.sub(str, cur, 12) |> ObjectId.fromBinaryString),
   cur + 12,
 );
 
@@ -581,7 +568,7 @@ let to_simple_json = doc => {
       | MD5(v)
       | UserDefined(v) => "\"" ++ v ++ "\""
       }
-    | ObjectId(v) => "\"" ++ v ++ "\""
+    | ObjectId(v) => "\"" ++ ObjectId.toString(v) ++ "\""
     | Boolean(v) => if (v) {"\"true\""} else {"\"false\""}
     | UTC(v) => Int64.to_string(v)
     | Null(NULL) => "\"null\""

@@ -4,4 +4,4 @@
  (flags (:standard -w -52))
  (preprocess
     (pps lwt_ppx))
- (libraries unix lwt lwt.unix lwt_ppx))
+ (libraries unix lwt lwt.unix lwt_ppx hex))

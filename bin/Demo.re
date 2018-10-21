@@ -1,6 +1,10 @@
 open ReMongo;
 
-let doc = Bson.empty |> Bson.add_element("name", Bson.create_string("test"));
+let doc =
+  Bson.empty
+  |> Bson.add_element("a", Bson.create_objectId(ObjectId.generate()))
+  |> Bson.add_element("b", Bson.create_objectId(ObjectId.generate()))
+  |> Bson.add_element("c", Bson.create_objectId(ObjectId.generate()));
 
 print_endline(doc |> Bson.to_simple_json);
 

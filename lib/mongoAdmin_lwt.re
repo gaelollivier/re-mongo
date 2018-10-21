@@ -23,8 +23,8 @@ let get_channel_pool = Mongo_lwt.get_channel_pool;
 
 let wrap_bson = (f, arg) =>
   try (f(arg)) {
-  | Bson.Invalid_objectId =>
-    raise(MongoAdmin_failed("Bson.Invalid_objectId"))
+  | ObjectId.InvalidObjectId =>
+    raise(MongoAdmin_failed("ObjectId.InvalidObjectId"))
   | Bson.Wrong_bson_type =>
     raise(MongoAdmin_failed("Wrong_bson_type when encoding bson doc"))
   | Bson.Malformed_bson =>

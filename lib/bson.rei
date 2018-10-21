@@ -16,10 +16,6 @@
     {e Version 0.89.1}
 */;
 
-/** Raised when an objectId's length is not 12. see http://bsonspec.org/#/specification */
-
-exception Invalid_objectId;
-
 /** Raised when an unkown bson type is met while encoding the bson doc */
 
 exception Wrong_bson_type;
@@ -89,7 +85,7 @@ let create_doc_element: t => element;
 let create_list: list(element) => element;
 let create_doc_element_list: list(t) => element;
 let create_user_binary: string => element;
-let create_objectId: string => element;
+let create_objectId: ObjectId.t => element;
 let create_boolean: bool => element;
 let create_utc: int64 => element;
 let create_null: unit => element;
@@ -112,7 +108,7 @@ let get_function_binary: element => string;
 let get_uuid_binary: element => string;
 let get_md5_binary: element => string;
 let get_user_binary: element => string;
-let get_objectId: element => string;
+let get_objectId: element => ObjectId.t;
 let get_boolean: element => bool;
 let get_utc: element => int64;
 let get_null: element => special;

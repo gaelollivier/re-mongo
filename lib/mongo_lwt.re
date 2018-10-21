@@ -20,7 +20,8 @@ let change_collection = (m, c) => {...m, collection_name: c};
 
 let wrap_bson = (f, arg) =>
   try (f(arg)) {
-  | Bson.Invalid_objectId => raise(Mongo_failed("Bson.Invalid_objectId"))
+  | ObjectId.InvalidObjectId =>
+    raise(Mongo_failed("ObjectId.InvalidObjectId"))
   | Bson.Wrong_bson_type =>
     raise(Mongo_failed("Wrong_bson_type when encoding bson doc"))
   | Bson.Malformed_bson =>
