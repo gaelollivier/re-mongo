@@ -31,7 +31,7 @@ let create: (string, int) => t;
 
 /** create a MongoAdmin connecting to 127.0.0.1, port 27017. May raise MongoAdmin_failed exception.*/
 
-let create_local_default: unit => t;
+let createLocalDefault: unit => t;
 
 /** destroy a MongoAdmin. Please use this to destroy a MongoAdmin once it finishes its purpose, in order to release system resources. May raise MongoAdmin_failed exception.*/
 

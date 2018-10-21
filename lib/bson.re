@@ -1,4 +1,4 @@
-exception Wrong_bson_type;
+exception WrongBsonType;
 exception Wrong_string;
 exception Malformed_bson;
 
@@ -35,17 +35,17 @@ and binary =
 
 let empty = [];
 
-let is_empty =
+let isEmpty =
   fun
   | [] => true
   | _ => false;
 
-let has_element = List.mem_assoc;
+let hasElement = List.mem_assoc;
 
 /*
    The remove  operations.
  */
-let remove_element = List.remove_assoc;
+let removeElement = List.remove_assoc;
 
 /*
    for constructing a document
@@ -53,11 +53,11 @@ let remove_element = List.remove_assoc;
    2. we create element as we want
    3. we add the element to the document, with a element name
  */
-let add_element = (ename, element, doc) => {
+let addElement = (ename, element, doc) => {
   /* Emulating StringMap add operation */
   let doc =
-    if (has_element(ename, doc)) {
-      remove_element(ename, doc);
+    if (hasElement(ename, doc)) {
+      removeElement(ename, doc);
     } else {
       doc;
     };
@@ -65,142 +65,116 @@ let add_element = (ename, element, doc) => {
   [(ename, element), ...doc];
 };
 
+let fromElements = elements => elements;
+
 /*
    for using a document
    1. we get an element from document, if existing
    2. we get the value of the element
  */
-let get_element = List.assoc;
+let getElement = List.assoc;
 
-let create_double = v => Double(v);
-let create_string = v => String(v);
-let create_doc_element = v => Document(v);
-let create_list = l => Array(l);
-let create_doc_element_list = l =>
-  create_list(List.map(create_doc_element, l));
-/* let create_generic_binary v = Binary (Generic v);;
-   let create_function_binary v = Binary (Function v);;
-   let create_uuid_binary v = Binary (UUID v);;
-   let create_md5_binary v = Binary (MD5 v);; */
+let createDouble = v => Double(v);
+let createString = v => String(v);
+let createDocElement = v => Document(v);
+let createList = l => Array(l);
+let createDocElementList = l => createList(List.map(createDocElement, l));
+let createObjectId = v => ObjectId(v);
+let createBoolean = v => Boolean(v);
+let createUtc = v => UTC(v);
+let createNull = () => Null(NULL);
+let createRegex = (s1, s2) => [@implicit_arity] Regex(s1, s2);
+let createInt32 = v => Int32(v);
+let createInt64 = v => Int64(v);
+
 let create_user_binary = v => Binary(UserDefined(v));
-/* let is_valid_objectId objectId = if String.length objectId = 12 || String.length objectId = 24 then true else false;; */
-let hex_to_string = s => {
-  let n = String.length(s);
-  let buf = Buffer.create(12);
-  let rec convert = i =>
-    if (i > n - 1) {
-      Buffer.contents(buf);
-    } else {
-      Buffer.add_char(
-        buf,
-        char_of_int(int_of_string("0x" ++ String.sub(s, i, 2))),
-      );
-      convert(i + 2);
-    };
 
-  convert(0);
-};
-
-let create_objectId = v => ObjectId(v);
-
-let create_boolean = v => Boolean(v);
-let create_utc = v => UTC(v);
-let create_null = () => Null(NULL);
-let create_regex = (s1, s2) => [@implicit_arity] Regex(s1, s2);
-let create_jscode = v => JSCode(v);
-let create_jscode_w_s = (s, doc) => [@implicit_arity] JSCodeWS(s, doc);
-let create_int32 = v => Int32(v);
-let create_int64 = v => Int64(v);
-/* let create_timestamp v = Timestamp v;; */
-let create_minkey = () => MinKey(MINKEY);
-let create_maxkey = () => MaxKey(MAXKEY);
-
-let get_double =
+let getDouble =
   fun
   | Double(v) => v
-  | _ => raise(Wrong_bson_type);
-let get_string =
+  | _ => raise(WrongBsonType);
+let getString =
   fun
   | String(v) => v
-  | _ => raise(Wrong_bson_type);
-let get_doc_element =
+  | _ => raise(WrongBsonType);
+let getDocElement =
   fun
   | Document(v) => v
-  | _ => raise(Wrong_bson_type);
-let get_list =
+  | _ => raise(WrongBsonType);
+let getList =
   fun
   | Array(v) => v
-  | _ => raise(Wrong_bson_type);
+  | _ => raise(WrongBsonType);
+let getObjectId =
+  fun
+  | ObjectId(v) => v
+  | _ => raise(WrongBsonType);
+let getBoolean =
+  fun
+  | Boolean(v) => v
+  | _ => raise(WrongBsonType);
+let getUtc =
+  fun
+  | UTC(v) => v
+  | _ => raise(WrongBsonType);
+let getNull =
+  fun
+  | Null(NULL) => NULL
+  | _ => raise(WrongBsonType);
+let getRegex =
+  fun
+  | Regex(v) => v
+  | _ => raise(WrongBsonType);
+let getInt32 =
+  fun
+  | Int32(v) => v
+  | _ => raise(WrongBsonType);
+let getInt64 =
+  fun
+  | Int64(v) => v
+  | _ => raise(WrongBsonType);
+let getTimestamp =
+  fun
+  | Timestamp(v) => v
+  | _ => raise(WrongBsonType);
+let allElements = d => d;
+
 let get_generic_binary =
   fun
   | Binary(Generic(v)) => v
-  | _ => raise(Wrong_bson_type);
+  | _ => raise(WrongBsonType);
 let get_function_binary =
   fun
   | Binary(Function(v)) => v
-  | _ => raise(Wrong_bson_type);
+  | _ => raise(WrongBsonType);
 let get_uuid_binary =
   fun
   | Binary(UUID(v)) => v
-  | _ => raise(Wrong_bson_type);
+  | _ => raise(WrongBsonType);
 let get_md5_binary =
   fun
   | Binary(MD5(v)) => v
-  | _ => raise(Wrong_bson_type);
+  | _ => raise(WrongBsonType);
 let get_user_binary =
   fun
   | Binary(UserDefined(v)) => v
-  | _ => raise(Wrong_bson_type);
-let get_objectId =
-  fun
-  | ObjectId(v) => v
-  | _ => raise(Wrong_bson_type);
-let get_boolean =
-  fun
-  | Boolean(v) => v
-  | _ => raise(Wrong_bson_type);
-let get_utc =
-  fun
-  | UTC(v) => v
-  | _ => raise(Wrong_bson_type);
-let get_null =
-  fun
-  | Null(NULL) => NULL
-  | _ => raise(Wrong_bson_type);
-let get_regex =
-  fun
-  | Regex(v) => v
-  | _ => raise(Wrong_bson_type);
+  | _ => raise(WrongBsonType);
 let get_jscode =
   fun
   | JSCode(v) => v
-  | _ => raise(Wrong_bson_type);
+  | _ => raise(WrongBsonType);
 let get_jscode_w_s =
   fun
   | JSCodeWS(v) => v
-  | _ => raise(Wrong_bson_type);
-let get_int32 =
-  fun
-  | Int32(v) => v
-  | _ => raise(Wrong_bson_type);
-let get_int64 =
-  fun
-  | Int64(v) => v
-  | _ => raise(Wrong_bson_type);
-let get_timestamp =
-  fun
-  | Timestamp(v) => v
-  | _ => raise(Wrong_bson_type);
+  | _ => raise(WrongBsonType);
 let get_minkey =
   fun
   | MinKey(MINKEY) => MINKEY
-  | _ => raise(Wrong_bson_type);
+  | _ => raise(WrongBsonType);
 let get_maxkey =
   fun
   | MaxKey(MAXKEY) => MAXKEY
-  | _ => raise(Wrong_bson_type);
-
-let all_elements = d => d;
+  | _ => raise(WrongBsonType);
 
 /*
    encode int64, int32 and float.
@@ -264,7 +238,7 @@ let list_to_doc = l => {
     fun
     | [] => acc
     | [hd, ...tl] =>
-      to_doc(i + 1, add_element(string_of_int(i), hd, acc), tl);
+      to_doc(i + 1, addElement(string_of_int(i), hd, acc), tl);
 
   to_doc(0, empty, l);
 };
@@ -530,7 +504,7 @@ let decode = str => {
         (acc, cur + 1);
       } else {
         let (ename, element, next_cur) = decode_element(str, cur);
-        decode_elements(next_cur, add_element(ename, element, acc));
+        decode_elements(next_cur, addElement(ename, element, acc));
       };
 
     let (doc, des) = decode_elements(next_cur, acc);
@@ -548,7 +522,7 @@ let decode = str => {
    Not that this bson to json conversion is far from completion.
    It is used to help the test verification and can handle only simple objects.
  */
-let to_simple_json = doc => {
+let toSimpleJson = doc => {
   let rec el_to_sl = el =>
     List.rev(List.fold_left((acc, e) => [e_to_s(e), ...acc], [], el))
   and e_to_s =

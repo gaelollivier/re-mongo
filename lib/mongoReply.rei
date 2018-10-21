@@ -34,7 +34,7 @@ let get_num_returned: t => int32;
 
 /** get the document list returned out of a MongoReply */
 
-let get_document_list: t => list(Bson.t);
+let getDocumentList: t => list(Bson.t);
 
 /** {6 Operations} */;
 

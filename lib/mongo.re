@@ -21,8 +21,8 @@ let wrap_bson = (f, arg) =>
   try (f(arg)) {
   | ObjectId.InvalidObjectId =>
     raise(Mongo_failed("ObjectId.InvalidObjectId"))
-  | Bson.Wrong_bson_type =>
-    raise(Mongo_failed("Wrong_bson_type when encoding bson doc"))
+  | Bson.WrongBsonType =>
+    raise(Mongo_failed("wrongBsonType when encoding bson doc"))
   | Bson.Malformed_bson =>
     raise(Mongo_failed("Malformed_bson when decoding bson"))
   };
@@ -49,7 +49,7 @@ let create = (ip, port, db_name, collection_name) => {
   file_descr: wrap_unix(connect_to, (ip, port)),
 };
 
-let create_local_default = (db_name, collection_name) =>
+let createLocalDefault = (db_name, collection_name) =>
   create("127.0.0.1", 27017, db_name, collection_name);
 
 let destroy = m => wrap_unix(Unix.close, m.file_descr);
@@ -193,27 +193,27 @@ let find_q_s_of_num = (~skip=0, m, q, s, num) =>
 
 let count = (~skip=?, ~limit=?, ~query=Bson.empty, m) => {
   let c_bson =
-    Bson.add_element("query", Bson.create_doc_element(query), Bson.empty);
+    Bson.addElement("query", Bson.createDocElement(query), Bson.empty);
   let c_bson =
-    Bson.add_element("count", Bson.create_string(m.collection_name), c_bson);
+    Bson.addElement("count", Bson.createString(m.collection_name), c_bson);
   let c_bson =
     switch (limit) {
     | Some(n) =>
-      Bson.add_element("limit", Bson.create_int32(Int32.of_int(n)), c_bson)
+      Bson.addElement("limit", Bson.createInt32(Int32.of_int(n)), c_bson)
     | None => c_bson
     };
 
   let c_bson =
     switch (skip) {
     | Some(n) =>
-      Bson.add_element("skip", Bson.create_int32(Int32.of_int(n)), c_bson)
+      Bson.addElement("skip", Bson.createInt32(Int32.of_int(n)), c_bson)
     | None => c_bson
     };
 
   let m = change_collection(m, "$cmd");
   let r = find_q_one(m, c_bson);
-  let d = List.nth(MongoReply.get_document_list(r), 0);
-  int_of_float(Bson.get_double(Bson.get_element("n", d)));
+  let d = List.nth(MongoReply.getDocumentList(r), 0);
+  int_of_float(Bson.getDouble(Bson.getElement("n", d)));
 };
 
 let get_more_in = ((m, c, num)) =>
@@ -235,7 +235,7 @@ let drop_database = m => {
   let m = change_collection(m, "$cmd");
   find_q_one(
     m,
-    Bson.add_element("dropDatabase", Bson.create_int32(1l), Bson.empty),
+    Bson.addElement("dropDatabase", Bson.createInt32(1l), Bson.empty),
   );
 };
 
@@ -243,9 +243,9 @@ let drop_collection = m => {
   let m_ = change_collection(m, "$cmd");
   find_q_one(
     m_,
-    Bson.add_element(
+    Bson.addElement(
       "drop",
-      Bson.create_string(m.collection_name),
+      Bson.createString(m.collection_name),
       Bson.empty,
     ),
   );
@@ -257,9 +257,9 @@ let get_indexes = m => {
   let m_ = change_collection(m, "system.indexes");
   find_q(
     m_,
-    Bson.add_element(
+    Bson.addElement(
       "ns",
-      Bson.create_string(m.db_name ++ "." ++ m.collection_name),
+      Bson.createString(m.db_name ++ "." ++ m.collection_name),
       Bson.empty,
     ),
   );
@@ -279,11 +279,11 @@ type index_option =
 
 let ensure_index = (m, key_bson, options) => {
   let default_name = () => {
-    let doc = Bson.get_element("key", key_bson);
+    let doc = Bson.getElement("key", key_bson);
 
     List.fold_left(
       (s, (k, e)) => {
-        let i = Bson.get_int32(e);
+        let i = Bson.getInt32(e);
         if (s == "") {
           Printf.sprintf("%s_%ld", k, i);
         } else {
@@ -291,7 +291,7 @@ let ensure_index = (m, key_bson, options) => {
         };
       },
       "",
-      Bson.all_elements(Bson.get_doc_element(doc)),
+      Bson.allElements(Bson.getDocElement(doc)),
     );
   };
 
@@ -304,20 +304,18 @@ let ensure_index = (m, key_bson, options) => {
       (acc, o) =>
         switch (o) {
         | Background(b) =>
-          Bson.add_element("background", Bson.create_boolean(b), acc)
-        | Unique(b) =>
-          Bson.add_element("unique", Bson.create_boolean(b), acc)
+          Bson.addElement("background", Bson.createBoolean(b), acc)
+        | Unique(b) => Bson.addElement("unique", Bson.createBoolean(b), acc)
         | Name(s) =>
           has_name := true;
-          Bson.add_element("name", Bson.create_string(s), acc);
+          Bson.addElement("name", Bson.createString(s), acc);
         | DropDups(b) =>
-          Bson.add_element("dropDups", Bson.create_boolean(b), acc)
-        | Sparse(b) =>
-          Bson.add_element("sparse", Bson.create_boolean(b), acc)
+          Bson.addElement("dropDups", Bson.createBoolean(b), acc)
+        | Sparse(b) => Bson.addElement("sparse", Bson.createBoolean(b), acc)
         | ExpireAfterSeconds(i) =>
-          Bson.add_element(
+          Bson.addElement(
             "expireAfterSeconds",
-            Bson.create_int32(Int32.of_int(i)),
+            Bson.createInt32(Int32.of_int(i)),
             acc,
           )
         | V(i) =>
@@ -325,13 +323,13 @@ let ensure_index = (m, key_bson, options) => {
             raise(Mongo_failed("Version number for index must be 0 or 1"));
           };
           has_version := true;
-          Bson.add_element("v", Bson.create_int32(Int32.of_int(i)), acc);
+          Bson.addElement("v", Bson.createInt32(Int32.of_int(i)), acc);
         | Weight(bson) =>
-          Bson.add_element("weights", Bson.create_doc_element(bson), acc)
+          Bson.addElement("weights", Bson.createDocElement(bson), acc)
         | Default_language(s) =>
-          Bson.add_element("default_language", Bson.create_string(s), acc)
+          Bson.addElement("default_language", Bson.createString(s), acc)
         | Language_override(s) =>
-          Bson.add_element("language_override", Bson.create_string(s), acc)
+          Bson.addElement("language_override", Bson.createString(s), acc)
         },
       key_bson,
       options,
@@ -340,11 +338,7 @@ let ensure_index = (m, key_bson, options) => {
   /* check if then name has been set, create a default name otherwise */
   let main_bson =
     if (has_name^ == false) {
-      Bson.add_element(
-        "name",
-        Bson.create_string(default_name()),
-        main_bson,
-      );
+      Bson.addElement("name", Bson.createString(default_name()), main_bson);
     } else {
       main_bson;
     };
@@ -352,15 +346,15 @@ let ensure_index = (m, key_bson, options) => {
   /* check if the version has been set, set 1 otherwise */
   let main_bson =
     if (has_version^ == false) {
-      Bson.add_element("v", Bson.create_int32(1l), main_bson);
+      Bson.addElement("v", Bson.createInt32(1l), main_bson);
     } else {
       main_bson;
     };
 
   let main_bson =
-    Bson.add_element(
+    Bson.addElement(
       "ns",
-      Bson.create_string(m.db_name ++ "." ++ m.collection_name),
+      Bson.createString(m.db_name ++ "." ++ m.collection_name),
       main_bson,
     );
 
@@ -371,10 +365,10 @@ let ensure_index = (m, key_bson, options) => {
 
 let ensure_simple_index = (~options=[], m, field) => {
   let key_bson =
-    Bson.add_element(
+    Bson.addElement(
       "key",
-      Bson.create_doc_element(
-        Bson.add_element(field, Bson.create_int32(1l), Bson.empty),
+      Bson.createDocElement(
+        Bson.addElement(field, Bson.createInt32(1l), Bson.empty),
       ),
       Bson.empty,
     );
@@ -384,23 +378,23 @@ let ensure_simple_index = (~options=[], m, field) => {
 let ensure_multi_simple_index = (~options=[], m, fields) => {
   let key_bson =
     List.fold_left(
-      (acc, f) => Bson.add_element(f, Bson.create_int32(1l), acc),
+      (acc, f) => Bson.addElement(f, Bson.createInt32(1l), acc),
       Bson.empty,
       fields,
     );
 
   let key_bson =
-    Bson.add_element("key", Bson.create_doc_element(key_bson), Bson.empty);
+    Bson.addElement("key", Bson.createDocElement(key_bson), Bson.empty);
   ensure_index(m, key_bson, options);
 };
 
 let drop_index = (m, index_name) => {
   let index_bson =
-    Bson.add_element("index", Bson.create_string(index_name), Bson.empty);
+    Bson.addElement("index", Bson.createString(index_name), Bson.empty);
   let delete_bson =
-    Bson.add_element(
+    Bson.addElement(
       "deleteIndexes",
-      Bson.create_string(m.collection_name),
+      Bson.createString(m.collection_name),
       index_bson,
     );
   let m = change_collection(m, "$cmd");

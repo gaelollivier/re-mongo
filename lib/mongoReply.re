@@ -14,7 +14,7 @@ let get_response_flags = r => r.response_flags;
 let get_cursor = r => r.cursor_id;
 let get_starting_from = r => r.starting_from;
 let get_num_returned = r => r.num_returned;
-let get_document_list = r => r.document_list;
+let getDocumentList = r => r.document_list;
 
 let decode_reply_doc = str => {
   /*print_endline str;
@@ -78,7 +78,7 @@ let to_string = r => {
     fun
     | [] => ()
     | [hd, ...tl] => {
-        Buffer.add_string(buf, Bson.to_simple_json(hd));
+        Buffer.add_string(buf, Bson.toSimpleJson(hd));
         Buffer.add_string(buf, "\n");
         process_doc_list(tl);
       };

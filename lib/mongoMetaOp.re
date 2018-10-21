@@ -14,29 +14,29 @@ type meta_op =
 
 let meta_op = (query, op) => {
   let r =
-    if (Bson.has_element("$query", query)) {
+    if (Bson.hasElement("$query", query)) {
       query;
     } else {
-      Bson.add_element("$query", Bson.create_doc_element(query), Bson.empty);
+      Bson.addElement("$query", Bson.createDocElement(query), Bson.empty);
     };
 
   switch (op) {
-  | Comment(c) => Bson.add_element("$comment", Bson.create_string(c), r)
+  | Comment(c) => Bson.addElement("$comment", Bson.createString(c), r)
   | MaxScan(i) =>
-    Bson.add_element("$maxScan", Bson.create_int32(Int32.of_int(i)), r)
+    Bson.addElement("$maxScan", Bson.createInt32(Int32.of_int(i)), r)
   | Max(max_bson) =>
-    Bson.add_element("$max", Bson.create_doc_element(max_bson), r)
+    Bson.addElement("$max", Bson.createDocElement(max_bson), r)
   | Min(min_bson) =>
-    Bson.add_element("$min", Bson.create_doc_element(min_bson), r)
+    Bson.addElement("$min", Bson.createDocElement(min_bson), r)
   | OrderBy(orderby_bson) =>
-    Bson.add_element("$orderby", Bson.create_doc_element(orderby_bson), r)
-  | Explain => Bson.add_element("$explain", Bson.create_int32(1l), r)
+    Bson.addElement("$orderby", Bson.createDocElement(orderby_bson), r)
+  | Explain => Bson.addElement("$explain", Bson.createInt32(1l), r)
   | Hint(hint_bson) =>
-    Bson.add_element("$hint", Bson.create_doc_element(hint_bson), r)
-  | ReturnKey => Bson.add_element("$returnKey", Bson.create_boolean(true), r)
+    Bson.addElement("$hint", Bson.createDocElement(hint_bson), r)
+  | ReturnKey => Bson.addElement("$returnKey", Bson.createBoolean(true), r)
   | ShowDiskLoc =>
-    Bson.add_element("$showDiskLoc", Bson.create_boolean(true), r)
-  | Snapshot => Bson.add_element("$snapshot", Bson.create_boolean(true), r)
+    Bson.addElement("$showDiskLoc", Bson.createBoolean(true), r)
+  | Snapshot => Bson.addElement("$snapshot", Bson.createBoolean(true), r)
   };
 };
 

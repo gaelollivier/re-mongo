@@ -36,9 +36,9 @@ let get_channel_pool:
 
 let create: (~max_connection: int=?, string, int, string, string) => Lwt.t(t);
 
-/** create a Mongo connecting to 127.0.0.1, port 27017. e.g. create_local_default db_name collection_name. May raise Mongo_failed exception.*/
+/** create a Mongo connecting to 127.0.0.1, port 27017. e.g. createLocalDefault db_name collection_name. May raise Mongo_failed exception.*/
 
-let create_local_default: (string, string) => Lwt.t(t);
+let createLocalDefault: (string, string) => Lwt.t(t);
 
 /** destroy a Mongo. Please use this to destroy a Mongo once it finishes its purpose, in order to release system resources. May raise Mongo_failed exception.*/
 

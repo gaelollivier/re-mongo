@@ -18,7 +18,7 @@
 
 /** Raised when an unkown bson type is met while encoding the bson doc */
 
-exception Wrong_bson_type;
+exception WrongBsonType;
 
 /** Raised only when trying to decode the bytes to string. */
 
@@ -51,23 +51,26 @@ let empty: t;
 
 /** Check whether this Bson document empty or not */
 
-let is_empty: t => bool;
+let isEmpty: t => bool;
 
 /** Add an element to a Bson document */
 
-let add_element: (string, element, t) => t;
+let addElement: (string, element, t) => t;
+
+/** Create a Bson document from a list of [(key, element), ...] **/
+let fromElements: list((string, element)) => t;
 
 /** Get an element from a Bson document via its name */
 
-let get_element: (string, t) => element;
+let getElement: (string, t) => element;
 
 /** Check whether this Bson document has a specific element */
 
-let has_element: (string, t) => bool;
+let hasElement: (string, t) => bool;
 
 /** Remove an element from a Bson document */
 
-let remove_element: (string, t) => t;
+let removeElement: (string, t) => t;
 
 /** Encode a Bson document to bytes (using type string as a carrier) */
 
@@ -79,56 +82,47 @@ let decode: string => t;
 
 /** {6 Creating elements} */;
 
-let create_double: float => element;
-let create_string: string => element;
-let create_doc_element: t => element;
-let create_list: list(element) => element;
-let create_doc_element_list: list(t) => element;
+let createDouble: float => element;
+let createString: string => element;
+let createDocElement: t => element;
+let createList: list(element) => element;
+let createDocElementList: list(t) => element;
+let createObjectId: ObjectId.t => element;
+let createBoolean: bool => element;
+let createUtc: int64 => element;
+let createNull: unit => element;
+let createRegex: (string, string) => element;
+let createInt32: int32 => element;
+let createInt64: int64 => element;
 let create_user_binary: string => element;
-let create_objectId: ObjectId.t => element;
-let create_boolean: bool => element;
-let create_utc: int64 => element;
-let create_null: unit => element;
-let create_regex: (string, string) => element;
-let create_jscode: string => element;
-let create_jscode_w_s: (string, t) => element;
-let create_int32: int32 => element;
-let create_int64: int64 => element;
-let create_minkey: unit => element;
-let create_maxkey: unit => element;
 
 /** {6 Getting raw values from elements} */;
 
-let get_double: element => float;
-let get_string: element => string;
-let get_doc_element: element => t;
-let get_list: element => list(element);
+let getDouble: element => float;
+let getString: element => string;
+let getDocElement: element => t;
+let getList: element => list(element);
+let getObjectId: element => ObjectId.t;
+let getBoolean: element => bool;
+let getUtc: element => int64;
+let getNull: element => special;
+let getRegex: element => (string, string);
+let getInt32: element => int32;
+let getInt64: element => int64;
+let getTimestamp: element => int64;
+
 let get_generic_binary: element => string;
 let get_function_binary: element => string;
 let get_uuid_binary: element => string;
 let get_md5_binary: element => string;
 let get_user_binary: element => string;
-let get_objectId: element => ObjectId.t;
-let get_boolean: element => bool;
-let get_utc: element => int64;
-let get_null: element => special;
-let get_regex: element => (string, string);
 let get_jscode: element => string;
 let get_jscode_w_s: element => (string, t);
-let get_int32: element => int32;
-let get_int64: element => int64;
-let get_timestamp: element => int64;
 let get_minkey: element => special;
 let get_maxkey: element => special;
 
-let all_elements: t => list((string, element));
+let allElements: t => list((string, element));
 
 /** {6 Experimental. Convert a Bson document to Json.} */;
 
-let to_simple_json: t => string;
-
-/*val create_generic_binary : string -> element;;
-  val create_function_binary : string -> element;;
-  val create_uuid_binary : string -> element;;
-  val create_md5_binary : string -> element;;
-  val create_timestamp : int64 -> element;;*/
+let toSimpleJson: t => string;

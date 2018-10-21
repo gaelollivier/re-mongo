@@ -22,8 +22,8 @@ let wrap_bson = (f, arg) =>
   try (f(arg)) {
   | ObjectId.InvalidObjectId =>
     raise(MongoAdmin_failed("ObjectId.InvalidObjectId"))
-  | Bson.Wrong_bson_type =>
-    raise(MongoAdmin_failed("Wrong_bson_type when encoding bson doc"))
+  | Bson.WrongBsonType =>
+    raise(MongoAdmin_failed("wrongBsonType when encoding bson doc"))
   | Bson.Malformed_bson =>
     raise(MongoAdmin_failed("Malformed_bson when decoding bson"))
   };
@@ -36,15 +36,15 @@ let wrap_unix = (f, arg) =>
 
 let create = (ip, port) =>
   Mongo.create(ip, port, admin_db_name, admin_collection_name);
-let create_local_default = () => create("127.0.0.1", 27017);
+let createLocalDefault = () => create("127.0.0.1", 27017);
 
 let destroy = a => Mongo.destroy(a);
 
 let get_request_id = cur_timestamp;
 
 let create_cmd = name => {
-  let e_1 = Bson.create_int32(1l);
-  let cmd_doc = name => Bson.add_element(name, e_1, Bson.empty);
+  let e_1 = Bson.createInt32(1l);
+  let cmd_doc = name => Bson.addElement(name, e_1, Bson.empty);
   {
     name,
     query: {

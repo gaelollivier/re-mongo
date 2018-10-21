@@ -80,7 +80,7 @@ let create_query =
   encode_int32(body_buf, skip);
   encode_int32(body_buf, return);
   Buffer.add_string(body_buf, encode(query_doc));
-  if (! Bson.is_empty(selector_doc)) {
+  if (!Bson.isEmpty(selector_doc)) {
     Buffer.add_string(body_buf, encode(selector_doc));
   };
   combine_header_body(request_id, OP_QUERY, body_buf);
